@@ -24,7 +24,7 @@ Les branches conditionnelles peuvent avoir un coût impressionnant, car elles em
 
 Afin de voir l'effet d'une branche, et les techniques typiques pour les retirer, nous allons écrire une fonction `toUppercase` qui prend 
 une chaîne de caractères en entrée et la ressort en majuscule.
-Cette fonction transformera `Hello, World !` en `HELLO, WOLRD !`.
+Cette fonction transformera `Hello, World !` en `HELLO, WORLD !`.
 
 Pour simplifier, nous n'allons convertir que l'alphabet latin `[a~z]` et ignorer les cas aux limites suivant la langue de l'utilisateur.
 

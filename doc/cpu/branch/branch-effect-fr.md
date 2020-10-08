@@ -76,9 +76,22 @@ On peut remplacer cette partie :
       }
 ```
 
-par:
+par :
 ```java
       chars[i] -= (((96 - chars[i]) & (chars[i] - 123)) >> 31) & 32;
+```
+
+ce qui donne :
+```java
+  public String branchlessToUppercase(String input) {
+    char[] chars = input.toCharArray();
+
+    for (int i = 0; i < chars.length; i++) {
+      chars[i] -= (((96 - chars[i]) & (chars[i] - 123)) >> 31) & 32;
+    }
+
+    return String.valueOf(chars);
+  }
 ```
 
 Qui est beaucoup moins lisible ! N'écrivez pas ce genre de code si vous n'avez pas la preuve qu'il est indispensable à rendre votre programme viable.

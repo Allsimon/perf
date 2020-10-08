@@ -1,4 +1,4 @@
-# Les `if` sont chers !
+# Les `if` sont chers
 
 Les branches de code (`if`, `switch`, `goto`, appels de fonctions, etc) peuvent avoir un coût non négligeable.
 Pour comprendre pourquoi, nous devons inspecter le hardware : les programmes sont constitués d'une suite d'instruction. L'instruction courante est enregistré dans quelque chose qui est appelé généralement le "program counter" (PC).

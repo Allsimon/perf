@@ -3,7 +3,7 @@
 Les branches de code (`if`, `switch`, `goto`, appels de fonctions, etc) peuvent avoir un coût non négligeable.
 Pour comprendre pourquoi, nous devons inspecter le hardware : les programmes sont constitués d'une suite d'instruction. L'instruction courante est enregistré dans quelque chose qui est appelé généralement le "program counter" (PC).
 
-En fonction de l'architecture du CPU, les instructions peuvent être à taille fixe (par exemple RISC) ou plus généralement à taille variable. 
+En fonction de l'architecture du CPU, les instructions peuvent être à taille fixe (par exemple RISC) ou plus généralement à taille variable.
 Pour simplifier, on peut imaginer que le mécanisme qui décode les instructions doive trouver la taille de l'instruction courante, puis il peut commencer à lire la suivante.
 
 Par contre, pour les instructions dites "branch" : trouver l'instruction suivante est légèrement plus compliqué que simplement lire juste après la courante.
@@ -18,7 +18,7 @@ Les branches non conditionnelles sont toujours prises. On les trouve souvent dan
 Les branches conditionnelles peuvent avoir un coût impressionnant, car elles empêchent plusieurs niveaux (compilateur/JIT/CPU/etc) d'optimiser automatiquement le code courant, par example :
 - le compilateur ne peut pas vectoriser automatiquement et utiliser des instructions type SIMD (Single instruction, multiple data): [~3 à 12 fois plus rapide](https://stackoverflow.blog/2020/07/08/improving-performance-with-simd-intrinsics-in-three-use-cases/)
 - le JIT ne peut pas inliner [10-40% plus rapide](https://www.cs.cmu.edu/~745/papers/p134-ayers.pdf)
-- le CPU ne peut pas exécuter en [out-of-order](https://en.wikipedia.org/wiki/Out-of-order_execution) 
+- le CPU ne peut pas exécuter en [out-of-order](https://en.wikipedia.org/wiki/Out-of-order_execution)
 
 ## Exemple
 
@@ -43,8 +43,8 @@ Nous allons utiliser la table ASCII afin de mettre en majuscule. En Java, une St
 | a    | 97    |
 | b    | 98    |
 | …    | …     |
-| z    | 122   | 
-| {    | 123   | 
+| z    | 122   |
+| {    | 123   |
 
 
 `Hello` est en fait: `[72, 101, 108, 108, 111]`
@@ -69,7 +69,7 @@ Une version basique de cette fonction peut s'écrire comme ça :
 
 L'astuce typique pour transformer du code avec branche en code "branchless" est d'utiliser un masque binaire pour ignorer certaines parties d'une équation.
 
-On peut remplacer cette partie : 
+On peut remplacer cette partie :
 ```java
       if (chars[i] >= 97 && chars[i] <= 122) {
         chars[i] -= 32;
@@ -82,7 +82,7 @@ par:
 ```
 
 Qui est beaucoup moins lisible ! N'écrivez pas ce genre de code si vous n'avez pas la preuve qu'il est indispensable à rendre votre programme viable.
- 
+
 Pour la comprendre, lisons la bout à bout :
 
 `int customEquation = ((96 - chars[i]) & (chars[i] - 123))`
@@ -107,6 +107,6 @@ En lançant ces deux méthodes dans JMH, j'obtiens sur ma machine ces résultats
 | branchToUppercase     | thrpt | 3   | 1710.388 | ± 110.290 | ops/s |
 | branchlessToUppercase | thrpt | 3   | 5600.499 | ± 218.414 | ops/s |
 
-Environ ~3.3 fois plus rapide ! 
+Environ ~3.3 fois plus rapide !
 
 > Attention : prenez soin de profiler sur la machine cible. Les ordinateurs modernes sont extrêmement complexes : l'architecture du CPU (ARM/x86/etc), le vendeur (Intel/AMD/IBM/etc), la version du compiler/OS/kernel, les accès mémoires, le cycle lunaire... Tout peut avoir un impact énorme (ou pas du tout).

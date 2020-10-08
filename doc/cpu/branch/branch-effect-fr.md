@@ -15,9 +15,8 @@ Si la branche n'est pas prise, alors le CPU lira l'instruction suivante comme d'
 
 Les branches non conditionnelles sont toujours prises. On les trouve souvent dans des boucles infinies, des appels de fonction, des retours de fonctions, des `break`, `continue`, `goto` etc
 
-Les branches conditionnelles peuvent avoir un coût impressionnant, car elles empêchent plusieurs niveaux (compilateur/JIT/CPU/etc) d'optimiser automatiquement le code courant :
-Par example :
-- le compilateur ne peut pas vectorizer automatiquement et utiliser des instructions type SIMD (Single instruction, multiple data): [~3 à 12 fois plus rapide](https://stackoverflow.blog/2020/07/08/improving-performance-with-simd-intrinsics-in-three-use-cases/)
+Les branches conditionnelles peuvent avoir un coût impressionnant, car elles empêchent plusieurs niveaux (compilateur/JIT/CPU/etc) d'optimiser automatiquement le code courant, par example :
+- le compilateur ne peut pas vectoriser automatiquement et utiliser des instructions type SIMD (Single instruction, multiple data): [~3 à 12 fois plus rapide](https://stackoverflow.blog/2020/07/08/improving-performance-with-simd-intrinsics-in-three-use-cases/)
 - le JIT ne peut pas inliner [10-40% plus rapide](https://www.cs.cmu.edu/~745/papers/p134-ayers.pdf)
 - le CPU ne peut pas exécuter en [out-of-order](https://en.wikipedia.org/wiki/Out-of-order_execution) 
 
@@ -27,7 +26,7 @@ Afin de voir l'effet d'une branche, et les techniques typiques pour les retirer,
 une chaîne de caractères en entrée et la ressort en majuscule.
 Cette fonction transformera `Hello, World !` en `HELLO, WOLRD !`.
 
-Pour simplifier, nous n'allons convertir que l'alphabet latin `[a~z]` et ignorer les cas au limite suivant la langue de l'utilisateur.
+Pour simplifier, nous n'allons convertir que l'alphabet latin `[a~z]` et ignorer les cas aux limites suivant la langue de l'utilisateur.
 
 Nous allons utiliser la table ASCII afin de mettre en majuscule. En Java, une String est juste un tableau de char et chaque char représente un caractère ASCII:
 

@@ -4,7 +4,7 @@ Les branches de code (`if`, `switch`, `goto`, appels de fonctions, etc) peuvent 
 Pour comprendre pourquoi, nous devons inspecter le hardware : les programmes sont constitués d'une suite d'instruction. L'instruction courante est enregistré dans quelque chose qui est appelé généralement le "program counter" (PC).
 
 En fonction de l'architecture du CPU, les instructions peuvent être à taille fixe (par exemple RISC) ou plus généralement à taille variable. 
-Pour simplifier, on peut imaginer que le mécanisme qui décode les instructions doit trouver la taille de l'instruction courante, puis il peut commencer à lire la suivante.
+Pour simplifier, on peut imaginer que le mécanisme qui décode les instructions doive trouver la taille de l'instruction courante, puis il peut commencer à lire la suivante.
 
 Par contre, pour les instructions dites "branch" : trouver l'instruction suivante est légèrement plus compliqué que simplement lire juste après la courante.
 Les branches sont des "goto" : elles indiquent au processeur où se trouve la prochaine instruction à exécuter.
@@ -15,7 +15,7 @@ Si la branche n'est pas prise, alors le CPU lira l'instruction suivante comme d'
 
 Les branches non conditionnelles sont toujours prises. On les trouve souvent dans des boucles infinies, des appels de fonction, des retours de fonctions, des `break`, `continue`, `goto` etc
 
-Les branches conditionnelles peuvent avoir un coût impressionnant car elles empêchent plusieurs niveaux (compilateur/JIT/CPU/etc) d'optimiser automatiquement le code courant :
+Les branches conditionnelles peuvent avoir un coût impressionnant, car elles empêchent plusieurs niveaux (compilateur/JIT/CPU/etc) d'optimiser automatiquement le code courant :
 Par example :
 - le compilateur ne peut pas vectorizer automatiquement et utiliser des instructions type SIMD (Single instruction, multiple data): [~3 à 12 fois plus rapide](https://stackoverflow.blog/2020/07/08/improving-performance-with-simd-intrinsics-in-three-use-cases/)
 - le JIT ne peut pas inliner [10-40% plus rapide](https://www.cs.cmu.edu/~745/papers/p134-ayers.pdf)
@@ -23,7 +23,7 @@ Par example :
 
 ## Exemple
 
-Afin de voir l'effet d'une branche, et les techniques typiques, pour les retirer, nous allons écrire une fonction `toUppercase` qui prend 
+Afin de voir l'effet d'une branche, et les techniques typiques pour les retirer, nous allons écrire une fonction `toUppercase` qui prend 
 une chaîne de caractères en entrée et la ressort en majuscule.
 Cette fonction transformera `Hello, World !` en `HELLO, WOLRD !`.
 
@@ -70,9 +70,7 @@ Une version basique de cette fonction peut s'écrire comme ça :
 
 L'astuce typique pour transformer du code avec branche en code "branchless" est d'utiliser un masque binaire pour ignorer certaines parties d'une équation.
 
-The typical trick to transform branchy code to branchless code is to use binary mask to ignore parts of an equation.
-
-On peut remplacer cette partie: 
+On peut remplacer cette partie : 
 ```java
       if (chars[i] >= 97 && chars[i] <= 122) {
         chars[i] -= 32;

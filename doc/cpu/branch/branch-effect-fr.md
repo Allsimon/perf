@@ -1,4 +1,4 @@
-# Les `if` sont chers !
+# Les `if` sont chers !
 
 Les branches de code (`if`, `switch`, `goto`, appels de fonctions, etc) peuvent avoir un coût non négligeable.
 Pour comprendre pourquoi, nous devons inspecter le hardware : les programmes sont constitués d'une suite d'instruction. L'instruction courante est enregistré dans quelque chose qui est appelé généralement le "program counter" (PC).
@@ -22,7 +22,7 @@ Les branches conditionnelles peuvent avoir un coût impressionnant, car elles em
 
 ## Exemple
 
-Afin de voir l'effet d'une branche, et les techniques typiques pour les retirer, nous allons écrire une fonction `toUppercase` qui prend 
+Afin de voir l'effet d'une branche, et les techniques typiques pour les retirer, nous allons écrire une fonction `toUppercase` qui prend
 une chaîne de caractères en entrée et la ressort en majuscule.
 Cette fonction transformera `Hello, World !` en `HELLO, WORLD !`.
 

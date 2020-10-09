@@ -113,12 +113,12 @@ On peut récupérer ce bit via un décalage de 31.
 
 Cela nous permet de faire des comparaisons de valeur sans avoir besoin de `if` ou autres branches.
 
-En lançant ces deux méthodes dans JMH, j'obtiens sur ma machine ces résultats :
+En lançant ces deux méthodes dans [JMH](https://openjdk.java.net/projects/code-tools/jmh/) (un outil de micro-benchmarking JVM), j'obtiens sur ma machine ces résultats :
 
-| Benchmark             | Mode  | Cnt | Score    | Error     | Units |
-|-----------------------|-------|-----|----------|-----------|-------|
-| branchToUppercase     | thrpt | 3   | 1710.388 | ± 110.290 | ops/s |
-| branchlessToUppercase | thrpt | 3   | 5600.499 | ± 218.414 | ops/s |
+| Benchmark             | Score    | Error     | Units |
+|-----------------------|----------|-----------|-------|
+| branchToUppercase     | 1710.388 | ± 110.290 | ops/s |
+| branchlessToUppercase | 5600.499 | ± 218.414 | ops/s |
 
 Environ ~3.3 fois plus rapide !
 

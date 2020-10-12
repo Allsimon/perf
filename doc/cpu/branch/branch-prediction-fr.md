@@ -88,7 +88,7 @@ On peut voir assez simplement que l'impact d'une branche sur le temps de traitem
 Heureusement, il existe une technique qui permet de réduire l'impact de la branche sur le nombre de cycles du CPU : la prédiction de branche.
 
 
-Quand il tombe sur une branche conditionnelle, le CPU va examiner les probabilités de prendre tel ou tel chemin (en fonction des cas déjà rencontré). 
+Quand le CPU tombe sur une branche conditionnelle, il examine les probabilités de prendre tel ou tel chemin (en fonction des cas déjà rencontré). 
 Il va "considérer" que cette branche est vraie et va continuer l'exécution telle quelle.
 
 Par exemple, si la branche est prédite comme prise et l'est effectivement, l'exécution ressemblerait à :
@@ -115,8 +115,7 @@ L'exécution ressemble à ça quand la prédiction est mauvaise :
 | a+= 3;       |   |   |   | F | D |   |   |   |   |    |
 | a+= 4;       |   |   |   |   |   |   | F | D | E | S  |
 
-Quand le prédicteur se trompe, on est légèrement plus lent que quand il a raison, mais le temps d'exécution n'est pas plus mauvais que s'il n'y avait pas de prédicteur du tout.
-
+Quand le prédicteur se trompe, on est plus lent que quand il a raison, mais le temps d'exécution n'est pas plus mauvais que s'il n'y avait pas de prédicteur du tout.
 
 La prédiction de branche peut donc nous faire gagner quelques cycles... Est-ce négligeable en pratique ou peut-on voir l'effet sur du vrai code en production ?
 
@@ -133,8 +132,8 @@ En Java, on pourrait écrire le programme de cette manière :
         .toArray();
     int[] sortedArray = IntStream.of(input).sorted().toArray();
 
-    int sumPositive(int[] array) {
-        int sum = 0;
+    long sumPositive(int[] array) {
+        long sum = 0;
         for (int value : array) {
           if (value >= 0) {
             sum += value;
@@ -144,14 +143,33 @@ En Java, on pourrait écrire le programme de cette manière :
     }
 ```
 
-L'appel de la fonction `countPositive` fait exactement le même nombre de calculs qu'on lui passe le tableau trié ou non.
-Cependant, la version triée va un peu de moins de ~2 fois plus vite.
+
+L'appel de la fonction `sumPositive` fait exactement le même nombre de calculs qu'on lui passe le tableau trié ou non.
+Cependant, la version triée va environ 5 fois plus vite.
+
+| Benchmark               | Score                       |
+|-------------------------|-----------------------------|
+| sortedArray             | 104995.716 ± 473.420  ops/s |
+| unsortedArray           | 22568.343 ± 102.114  ops/s  |
+
+On peut voir le même effet en utilisant les APIs `java.util.Stream` :
+
+```java
+    private long sumStream(int[] array) {
+      return Arrays.stream(array).filter(i -> i >= 0).sum();
+    }
+```
+
+| Benchmark               | Score                       |
+|-------------------------|-----------------------------|
+| streamSortedArray       | 97041.833 ± 610.366  ops/s  |
+| streamUnsortedArray     | 21495.011 ± 145.442  ops/s  |
 
 La version "branchless" n'est pas impactée par le tri du tableau.
 
 ```java
-    private int branchlessSumPositive(int[] array) {
-      int sum = 0;
+    private long branchlessSumPositive(int[] array) {
+      long sum = 0;
       for (int value : array) {
         sum += ~(value >> 31) & value;
       }
@@ -159,10 +177,7 @@ La version "branchless" n'est pas impactée par le tri du tableau.
     }
 ```
 
-En utilisant les APIs `java.util.Stream`, l'effet du tri est exacerbé : en plus du problème des branches mal prédites, le JIT a du mal à optimiser le code. 
-
-```java
-    private int sumStream(int[] array) {
-      return Arrays.stream(array).filter(i -> i >= 0).sum();
-    }
-```
+| Benchmark               | Score                       |
+|-------------------------|-----------------------------|
+| branchlessSortedArray   | 70806.141 ± 260.635  ops/s  |
+| branchlessUnsortedArray | 70930.320 ± 354.355  ops/s  |

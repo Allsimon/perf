@@ -1,10 +1,10 @@
 # 🔮 Prédiction de branches
 
 Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance. 
-Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches. 
+Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches.
 Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
 
-Les CPUs modernes ont plusieurs techniques pour réduire le coût des branches. L'avantage de ces techniques est qu'elles ne sont pas intrusives : la plupart des développeurs peuvent simplement les ignorer et récupérer quand même une partie des bénéfices. 
+Les CPUs modernes ont plusieurs techniques pour réduire le coût des branches. L'avantage de ces techniques est qu'elles ne sont pas intrusives : la plupart des développeurs peuvent simplement les ignorer et récupérer quand même une partie des bénéfices.
 
 ## Pipelines
 
@@ -89,7 +89,7 @@ On peut voir assez simplement que l'impact d'une branche sur le temps de traitem
 Heureusement, il existe une technique qui permet de réduire l'impact de la branche sur le nombre de cycles du CPU : la prédiction de branche.
 
 
-Quand le CPU tombe sur une branche conditionnelle, il examine les probabilités de prendre tel ou tel chemin (en fonction des cas déjà rencontré). 
+Quand le CPU tombe sur une branche conditionnelle, il examine les probabilités de prendre tel ou tel chemin (en fonction des cas déjà rencontré).
 Il va "considérer" que cette branche est vraie et va continuer l'exécution telle quelle.
 
 Par exemple, si la branche est prédite comme prise et l'est effectivement, l'exécution ressemblerait à :
@@ -122,7 +122,7 @@ La prédiction de branche peut donc nous faire gagner quelques cycles... Est-ce 
 
 ### Exemple
 
-Un exemple assez connu viens de la question la [plus upvotée de Stack Overflow](https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array). 
+Un exemple assez connu viens de la question la [plus upvotée de Stack Overflow](https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array).
 
 On part d'un tableau d'entier qui contient des nombres aléatoire compris entre `[-1000; 1000]` et on écrit un programme qui additionne tout les entiers positifs de ce tableau.
 

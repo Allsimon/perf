@@ -1,11 +1,10 @@
 # 🔮 Prédiction de branches
 
 Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance. 
-Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches. Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
+Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches. 
+Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
 
-Les CPUs modernes ont plusieurs tricks pour réduire le coût des branches : "superscalar execution", "operand forwarding", "speculative", "out-of-order execution" peuvent amener des gros gains de performances.
-
-L'avantage de ces techniques est qu'elles ne sont pas intrusives : la plupart des développeurs peuvent simplement l'ignorer et récupérer quand même une partie des bénéfices. 
+Les CPUs modernes ont plusieurs techniques pour réduire le coût des branches. L'avantage de ces techniques est qu'elles ne sont pas intrusives : la plupart des développeurs peuvent simplement les ignorer et récupérer quand même une partie des bénéfices. 
 
 ## Pipelines
 
@@ -36,7 +35,7 @@ En simplifiant beaucoup, on peut considérer que l'exécution ressemblait à cel
 | a+= 4; |   |   |   |   |   |   |   |   |   |    |    |    | F  | D  | E  | S  |
 
 Les CPUs récents utilisent souvent des "Instruction Pipelines" afin d'optimiser cela.
-Ces pipelines permettent par exemple d'effectuer des tâches en parallèles automatiquement, si elles ne peuvent pas s'impacter mutuellement.
+Ces pipelines permettent par exemple d'effectuer des tâches en parallèles automatiquement.
 
 L'exécution peut donc s'effectuer de cette manière, sans changer le résultat final :
 

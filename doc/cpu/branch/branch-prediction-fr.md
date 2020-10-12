@@ -50,7 +50,7 @@ En supposant que les temps F, D, E et S sont équivalents : on aurait rendu le p
 
 Si une branche conditionnelle est présente, le CPU ne peut pas savoir avec certitude quelle sera la prochaine tâche à effectuer.
 
-![trolley.jpg](Example de branche)
+![Trolley](trolley.jpg "Example de branche")
 
 Par exemple, en reprenant le même programme, mais en ajoutant une condition :
 ```java

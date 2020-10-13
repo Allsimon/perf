@@ -132,10 +132,10 @@ On part d'un tableau d'entier qui contient des nombres aléatoire compris entre 
 
 En Java, on pourrait écrire le programme de cette manière :
 ```java
-int[] array = IntStream.generate(() -> rnd.nextInt() % 1_000)
+int[] unsortedArray = IntStream.generate(() -> rnd.nextInt() % 1_000)
     .limit(30_000)
     .toArray();
-int[] sortedArray = IntStream.of(input).sorted().toArray();
+int[] sortedArray = IntStream.of(unsortedArray).sorted().toArray();
 
 long sumPositive(int[] array) {
     long sum = 0;

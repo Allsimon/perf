@@ -3,6 +3,7 @@ package cpu.branch;
 import static cpu.branch.BranchPredictionDataset.MIN_VALUE;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Measurement;
@@ -72,7 +73,7 @@ public class BranchPrediction {
     }
 
     private long sumStream(int[] array) {
-      return Arrays.stream(array).filter(i -> i >= MIN_VALUE).sum();
+      return IntStream.of(array).filter(i -> i >= MIN_VALUE).sum();
     }
   }
 }

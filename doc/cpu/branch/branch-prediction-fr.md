@@ -11,9 +11,11 @@ La plupart des développeurs peuvent simplement les ignorer et récupérer quand
 
 On peut imaginer un ordinateur comme une machine très simple qui suit une séquence d'instruction et les exécute une par une, comme on le ferait pour une recette de cuisine.
 
-Les plus vieux ordinateurs faisaient en effet cela, ils récupéraient la commande en mémoire, la décodaient, l'exécutaient, enregistraient le résultat, récupéraient la prochaine commande et répétaient jusqu'à ce qu'il n'y en n'ait plus ou que quelqu'un retire la prise.
+Les plus vieux ordinateurs faisaient en effet cela, ils récupéraient la commande en mémoire (Fetch), la décodaient (Decode), l'exécutaient (Execute), enregistraient le résultat (Save), récupéraient la prochaine commande et répétaient jusqu'à ce qu'il n'y en n'ait plus ou que quelqu'un retire la prise.
 
 Par exemple, pour une fonction très simple :
+> Les examples sont fournis en Java mais sont indépendants du language/plateforme
+
 ```java
 int doSomething(int a) {
     a+= 1;
@@ -33,7 +35,7 @@ En simplifiant beaucoup, on peut considérer que l'exécution ressemblait à cel
 | a+= 3; |   |   |   |   |   |   |   |   | F | D  | E  | S  |    |    |    |    |
 | a+= 4; |   |   |   |   |   |   |   |   |   |    |    |    | F  | D  | E  | S  |
 
-Même si la commande C+1 n'a pas besoin des résultats de la commande, le CPU attend patiemment que C finisse pour exécuter C+1.
+Même si la commande C+1 n'a pas besoin des résultats de la commande C, le CPU attend patiemment que C finisse pour exécuter C+1.
 
 Les CPUs récents utilisent souvent des "Instruction Pipelines" afin d'optimiser cela.
 Ces pipelines permettent par exemple d'effectuer des tâches en parallèles automatiquement.
@@ -118,7 +120,7 @@ L'exécution ressemble à ça quand la prédiction est mauvaise :
 | a+= 3;       |   |   |   | F | D |   |   |   |   |    |
 | a+= 4;       |   |   |   |   |   |   | F | D | E | S  |
 
-Quand le prédicteur se trompe, on est plus lent que quand il a raison, mais le temps d'exécution n'est pas plus mauvais que s'il n'y avait pas de prédicteur du tout.
+Quand le prédicteur se trompe, on est plus lent que quand il a raison, mais le temps d'exécution reste meilleur que s'il n'y avait pas de prédicteur du tout.
 
 La prédiction de branche peut donc nous faire gagner quelques cycles... Est-ce négligeable en pratique ou peut-on voir l'effet sur du vrai code en production ?
 
@@ -130,20 +132,20 @@ On part d'un tableau d'entier qui contient des nombres aléatoire compris entre 
 
 En Java, on pourrait écrire le programme de cette manière :
 ```java
-    int[] array = IntStream.generate(() -> rnd.nextInt() % 1_000)
-        .limit(30_000)
-        .toArray();
-    int[] sortedArray = IntStream.of(input).sorted().toArray();
+int[] unsortedArray = IntStream.generate(() -> rnd.nextInt() % 1_000)
+    .limit(30_000)
+    .toArray();
+int[] sortedArray = IntStream.of(unsortedArray).sorted().toArray();
 
-    long sumPositive(int[] array) {
-        long sum = 0;
-        for (int value : array) {
-          if (value >= 0) {
-            sum += value;
-          }
-        }
-        return sum;
+long sumPositive(int[] array) {
+    long sum = 0;
+    for (int value : array) {
+      if (value >= 0) {
+        sum += value;
+      }
     }
+    return sum;
+}
 ```
 
 
@@ -158,9 +160,9 @@ Cependant, la version triée va environ 5 fois plus vite.
 On peut voir le même effet en utilisant les APIs `java.util.Stream` :
 
 ```java
-    private long sumStream(int[] array) {
-      return Arrays.stream(array).filter(i -> i >= 0).sum();
-    }
+private long sumStream(int[] array) {
+  return IntStream.of(array).filter(i -> i >= 0).sum();
+}
 ```
 
 | Benchmark               | Score                       |
@@ -171,13 +173,13 @@ On peut voir le même effet en utilisant les APIs `java.util.Stream` :
 La version "branchless" n'est pas impactée par le tri du tableau.
 
 ```java
-    private long branchlessSumPositive(int[] array) {
-      long sum = 0;
-      for (int value : array) {
-        sum += ~(value >> 31) & value;
-      }
-      return sum;
-    }
+private long branchlessSumPositive(int[] array) {
+  long sum = 0;
+  for (int value : array) {
+    sum += ~(value >> 31) & value;
+  }
+  return sum;
+}
 ```
 
 | Benchmark               | Score                       |

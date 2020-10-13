@@ -1,8 +1,8 @@
 # 🔮 Prédiction de branches
 
 Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance.
-Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches.
-Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
+Il y a des techniques pour pouvoir éviter d'écrire ces branches.
+Ces techniques ont cependant un coût très élevé en termes de complexité/maintenabilité.
 
 Les CPUs modernes ont plusieurs techniques non intrusives pour réduire le coût des branches.
 La plupart des développeurs peuvent simplement les ignorer et récupérer quand même une partie des bénéfices.
@@ -12,8 +12,6 @@ La plupart des développeurs peuvent simplement les ignorer et récupérer quand
 On peut imaginer un ordinateur comme une machine très simple qui suit une séquence d'instruction et les exécute une par une, comme on le ferait pour une recette de cuisine.
 
 Les plus vieux ordinateurs faisaient en effet cela, ils récupéraient la commande en mémoire, la décodaient, l'exécutaient, enregistraient le résultat, récupéraient la prochaine commande et répétaient jusqu'à ce qu'il n'y en n'ait plus ou que quelqu'un retire la prise.
-
-Même si la commande C+1 n'avait pas besoin des résultats de la commande, le CPU attendait patiemment que C finisse pour exécuter C+1.
 
 Par exemple, pour une fonction très simple :
 ```java
@@ -34,6 +32,8 @@ En simplifiant beaucoup, on peut considérer que l'exécution ressemblait à cel
 | a+= 2; |   |   |   |   | F | D | E | S |   |    |    |    |    |    |    |    |
 | a+= 3; |   |   |   |   |   |   |   |   | F | D  | E  | S  |    |    |    |    |
 | a+= 4; |   |   |   |   |   |   |   |   |   |    |    |    | F  | D  | E  | S  |
+
+Même si la commande C+1 n'a pas besoin des résultats de la commande, le CPU attend patiemment que C finisse pour exécuter C+1.
 
 Les CPUs récents utilisent souvent des "Instruction Pipelines" afin d'optimiser cela.
 Ces pipelines permettent par exemple d'effectuer des tâches en parallèles automatiquement.

@@ -1,6 +1,6 @@
 # 🔮 Prédiction de branches
 
-Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance.
+Nous avons vu dans [l'article précédent](branch-effect-fr.md) que les branches peuvent avoir un coût élevé en termes de performance.
 Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches.
 Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
 

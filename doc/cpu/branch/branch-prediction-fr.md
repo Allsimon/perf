@@ -4,7 +4,8 @@ Nous avons vu dans l'article précédent que les branches peuvent avoir un coût
 Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches.
 Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
 
-Les CPUs modernes ont plusieurs techniques pour réduire le coût des branches. L'avantage de ces techniques est qu'elles ne sont pas intrusives : la plupart des développeurs peuvent simplement les ignorer et récupérer quand même une partie des bénéfices.
+Les CPUs modernes ont plusieurs techniques non intrusives pour réduire le coût des branches.
+La plupart des développeurs peuvent simplement les ignorer et récupérer quand même une partie des bénéfices.
 
 ## Pipelines
 

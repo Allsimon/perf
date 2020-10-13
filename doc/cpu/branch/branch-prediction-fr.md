@@ -33,7 +33,7 @@ En simplifiant beaucoup, on peut considérer que l'exécution ressemblait à cel
 | a+= 3; |   |   |   |   |   |   |   |   | F | D  | E  | S  |    |    |    |    |
 | a+= 4; |   |   |   |   |   |   |   |   |   |    |    |    | F  | D  | E  | S  |
 
-Même si la commande C+1 n'a pas besoin des résultats de la commande, le CPU attend patiemment que C finisse pour exécuter C+1.
+Même si la commande C+1 n'a pas besoin des résultats de la commande C, le CPU attend patiemment que C finisse pour exécuter C+1.
 
 Les CPUs récents utilisent souvent des "Instruction Pipelines" afin d'optimiser cela.
 Ces pipelines permettent par exemple d'effectuer des tâches en parallèles automatiquement.

@@ -1,11 +1,11 @@
 # 🔮 Prédiction de branches
 
-Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance. 
-Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches. Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
+Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance.
+Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches.
+Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
 
-Les CPUs modernes ont plusieurs tricks pour réduire le coût des branches : "superscalar execution", "operand forwarding", "speculative", "out-of-order execution" peuvent amener des gros gains de performances.
-
-L'avantage de ces techniques est qu'elles ne sont pas intrusives : la plupart des développeurs peuvent simplement l'ignorer et récupérer quand même une partie des bénéfices. 
+Les CPUs modernes ont plusieurs techniques non intrusives pour réduire le coût des branches.
+La plupart des développeurs peuvent simplement les ignorer et récupérer quand même une partie des bénéfices.
 
 ## Pipelines
 
@@ -36,7 +36,7 @@ En simplifiant beaucoup, on peut considérer que l'exécution ressemblait à cel
 | a+= 4; |   |   |   |   |   |   |   |   |   |    |    |    | F  | D  | E  | S  |
 
 Les CPUs récents utilisent souvent des "Instruction Pipelines" afin d'optimiser cela.
-Ces pipelines permettent par exemple d'effectuer des tâches en parallèles automatiquement, si elles ne peuvent pas s'impacter mutuellement.
+Ces pipelines permettent par exemple d'effectuer des tâches en parallèles automatiquement.
 
 L'exécution peut donc s'effectuer de cette manière, sans changer le résultat final :
 
@@ -49,7 +49,10 @@ L'exécution peut donc s'effectuer de cette manière, sans changer le résultat 
 
 En supposant que les temps F, D, E et S sont équivalents : on aurait rendu le programme ~2.2 (16/7) fois plus rapide !
 
-Si une branche conditionnelle est présente, le CPU ne peut pas savoir avec certitude quelle sera la prochaine tâche à effectuer.
+Si une branche conditionnelle est présente, alors on peut l'imaginer comme un train devant son aiguillage.
+![Trolley](trolley.jpg "Example de branche")
+
+Le CPU ne peut pas savoir avec certitude quelle sera la prochaine tâche à effectuer.
 
 Par exemple, en reprenant le même programme, mais en ajoutant une condition :
 ```java
@@ -88,7 +91,7 @@ On peut voir assez simplement que l'impact d'une branche sur le temps de traitem
 Heureusement, il existe une technique qui permet de réduire l'impact de la branche sur le nombre de cycles du CPU : la prédiction de branche.
 
 
-Quand il tombe sur une branche conditionnelle, le CPU va examiner les probabilités de prendre tel ou tel chemin (en fonction des cas déjà rencontré). 
+Quand le CPU tombe sur une branche conditionnelle, il examine les probabilités de prendre tel ou tel chemin (en fonction des cas déjà rencontré).
 Il va "considérer" que cette branche est vraie et va continuer l'exécution telle quelle.
 
 Par exemple, si la branche est prédite comme prise et l'est effectivement, l'exécution ressemblerait à :
@@ -115,14 +118,13 @@ L'exécution ressemble à ça quand la prédiction est mauvaise :
 | a+= 3;       |   |   |   | F | D |   |   |   |   |    |
 | a+= 4;       |   |   |   |   |   |   | F | D | E | S  |
 
-Quand le prédicteur se trompe, on est légèrement plus lent que quand il a raison, mais le temps d'exécution n'est pas plus mauvais que s'il n'y avait pas de prédicteur du tout.
-
+Quand le prédicteur se trompe, on est plus lent que quand il a raison, mais le temps d'exécution n'est pas plus mauvais que s'il n'y avait pas de prédicteur du tout.
 
 La prédiction de branche peut donc nous faire gagner quelques cycles... Est-ce négligeable en pratique ou peut-on voir l'effet sur du vrai code en production ?
 
 ### Exemple
 
-Un exemple assez connu viens de la question la [plus upvotée de Stack Overflow](https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array). 
+Un exemple assez connu viens de la question la [plus upvotée de Stack Overflow](https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array).
 
 On part d'un tableau d'entier qui contient des nombres aléatoire compris entre `[-1000; 1000]` et on écrit un programme qui additionne tout les entiers positifs de ce tableau.
 
@@ -133,8 +135,8 @@ En Java, on pourrait écrire le programme de cette manière :
         .toArray();
     int[] sortedArray = IntStream.of(input).sorted().toArray();
 
-    int sumPositive(int[] array) {
-        int sum = 0;
+    long sumPositive(int[] array) {
+        long sum = 0;
         for (int value : array) {
           if (value >= 0) {
             sum += value;
@@ -144,14 +146,33 @@ En Java, on pourrait écrire le programme de cette manière :
     }
 ```
 
-L'appel de la fonction `countPositive` fait exactement le même nombre de calculs qu'on lui passe le tableau trié ou non.
-Cependant, la version triée va un peu de moins de ~2 fois plus vite.
+
+L'appel de la fonction `sumPositive` fait exactement le même nombre de calculs qu'on lui passe le tableau trié ou non.
+Cependant, la version triée va environ 5 fois plus vite.
+
+| Benchmark               | Score                       |
+|-------------------------|-----------------------------|
+| sortedArray             | 104995.716 ± 473.420  ops/s |
+| unsortedArray           | 22568.343 ± 102.114  ops/s  |
+
+On peut voir le même effet en utilisant les APIs `java.util.Stream` :
+
+```java
+    private long sumStream(int[] array) {
+      return Arrays.stream(array).filter(i -> i >= 0).sum();
+    }
+```
+
+| Benchmark               | Score                       |
+|-------------------------|-----------------------------|
+| streamSortedArray       | 97041.833 ± 610.366  ops/s  |
+| streamUnsortedArray     | 21495.011 ± 145.442  ops/s  |
 
 La version "branchless" n'est pas impactée par le tri du tableau.
 
 ```java
-    private int branchlessSumPositive(int[] array) {
-      int sum = 0;
+    private long branchlessSumPositive(int[] array) {
+      long sum = 0;
       for (int value : array) {
         sum += ~(value >> 31) & value;
       }
@@ -159,10 +180,7 @@ La version "branchless" n'est pas impactée par le tri du tableau.
     }
 ```
 
-En utilisant les APIs `java.util.Stream`, l'effet du tri est exacerbé : en plus du problème des branches mal prédites, le JIT a du mal à optimiser le code. 
-
-```java
-    private int sumStream(int[] array) {
-      return Arrays.stream(array).filter(i -> i >= 0).sum();
-    }
-```
+| Benchmark               | Score                       |
+|-------------------------|-----------------------------|
+| branchlessSortedArray   | 70806.141 ± 260.635  ops/s  |
+| branchlessUnsortedArray | 70930.320 ± 354.355  ops/s  |

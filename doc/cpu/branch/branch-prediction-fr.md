@@ -1,6 +1,6 @@
 # 🔮 Prédiction de branches
 
-Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance. 
+Nous avons vu dans l'article précédent que les branches peuvent avoir un coût élevé en termes de performance.
 Nous avons aussi vu qu'il y avait des techniques pour pouvoir éviter d'écrire ces branches.
 Ces techniques ont cependant un coût très élevé en termes de complexité (de lecture).
 
@@ -48,9 +48,10 @@ L'exécution peut donc s'effectuer de cette manière, sans changer le résultat 
 
 En supposant que les temps F, D, E et S sont équivalents : on aurait rendu le programme ~2.2 (16/7) fois plus rapide !
 
-Si une branche conditionnelle est présente, le CPU ne peut pas savoir avec certitude quelle sera la prochaine tâche à effectuer.
-
+Si une branche conditionnelle est présente, alors on peut l'imaginer comme un train devant son aiguillage.
 ![Trolley](trolley.jpg "Example de branche")
+
+Le CPU ne peut pas savoir avec certitude quelle sera la prochaine tâche à effectuer.
 
 Par exemple, en reprenant le même programme, mais en ajoutant une condition :
 ```java

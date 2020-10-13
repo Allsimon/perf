@@ -11,7 +11,7 @@ La plupart des développeurs peuvent simplement les ignorer et récupérer quand
 
 On peut imaginer un ordinateur comme une machine très simple qui suit une séquence d'instruction et les exécute une par une, comme on le ferait pour une recette de cuisine.
 
-Les plus vieux ordinateurs faisaient en effet cela, ils récupéraient la commande en mémoire, la décodaient, l'exécutaient, enregistraient le résultat, récupéraient la prochaine commande et répétaient jusqu'à ce qu'il n'y en n'ait plus ou que quelqu'un retire la prise.
+Les plus vieux ordinateurs faisaient en effet cela, ils récupéraient la commande en mémoire (Fetch), la décodaient (Decode), l'exécutaient (Execute), enregistraient le résultat (Save), récupéraient la prochaine commande et répétaient jusqu'à ce qu'il n'y en n'ait plus ou que quelqu'un retire la prise.
 
 Par exemple, pour une fonction très simple :
 ```java

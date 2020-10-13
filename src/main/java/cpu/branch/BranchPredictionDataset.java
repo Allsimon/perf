@@ -12,7 +12,7 @@ public class BranchPredictionDataset {
   static final int MIN_VALUE = 500;
   final int[] input;
   final int[] sortedInput;
-  final int expectedOutput;
+  final long expectedOutput;
 
   /**
    * Generate arrays with values included in [-1000; 1000]
